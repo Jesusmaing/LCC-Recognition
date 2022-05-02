@@ -44,16 +44,19 @@ def visualizar():
 
                 id, confidence = recognizer.predict(gray[y:y+h,x:x+w])
                 # Check if confidence is less them 100 ==> "0" is perfect match 
-                if (confidence < 100):
+                if (confidence < 100 and round(100 - confidence) > 50.0):
                     lcc_matricula.set(id)
-                    confidence = "  {0}%".format(round(100 - confidence))
                 else:
                     lcc_matricula.set(-1)
                     id = "Desconocido"
-                    confidence = "  {0}%".format(round(100 - confidence))
+                confidence =round(100 - confidence)
                 
-                cv2.putText(frame, str(id), (x+5,y-5), font, 1, (255,255,255), 2)
-                cv2.putText(frame, str(confidence), (x+5,y+h-5), font, 1, (255,255,0), 1)  
+                #Si la coincidencia es mayor al 50%, se muestra la matricula del usuario
+                #Esto es para que evite predecir rostros teniendo un porcentaje de acertar
+                #muy bajo, por ende, empezaría a arrojar coincidencias muy malas o erroneas.
+                if confidence > 50.0:
+                    cv2.putText(frame, str(id), (x+5,y-5), font, 1, (255,255,255), 2)
+                    cv2.putText(frame, str(confidence)+"%", (x+5,y+h-5), font, 1, (255,255,0), 1)  
             
             frame = imutils.resize(frame, width=640)
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
