@@ -50,12 +50,10 @@ def visualizar():
                 confidence = round(100 - confidence)
 
                 cv2.putText(frame, str(id), (x+5,y-5), font, 1, (255,255,255), 2)
-                cv2.putText(frame, str(confidence)+"%", (x+5,y+h-5), font, 1, (255,255,0), 1)  
-            
-            frame = imutils.resize(frame, width=640)
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-            im = Image.fromarray(frame)
-            img = ImageTk.PhotoImage(image=im)
+                confidence =round(100 - confidence)
+                
+                #Si la coincidencia es mayor al 50%, se muestra la matricula del usuario
+            img = ImageTk.PhotoImage(image=img)
             lblVideo.configure(image=img)
             lblVideo.image = img
             lblVideo.after(10, visualizar)
